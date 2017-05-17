@@ -40,27 +40,28 @@ public class PackExecutableJarMojo extends AbstractMojo {
 	private static final String[] DEFAULT_INCLUDES = new String[] { "**/**" };
 
 	/**
-	 * List of files to include. Specified as fileset patterns which are relative to the input directory whose contents
+	 * List of files to include from the classesDirectory. Specified as fileset patterns which are relative to the input directory whose contents
 	 * is being packaged into the JAR.
 	 */
 	@Parameter
 	private String[] includes;
 
 	/**
-	 * List of files to exclude. Specified as fileset patterns which are relative to the input directory whose contents
+	 * List of files to exclude from the classesDirectory. Specified as fileset patterns which are relative to the input directory whose contents
 	 * is being packaged into the JAR.
 	 */
 	@Parameter
 	private String[] excludes;
 
 	/**
-	 * Directory containing the generated JAR.
+	 * Directory where the generated JAR should be saved in.
 	 */
 	@Parameter(defaultValue = "${project.build.directory}", required = true)
 	private File outputDirectory;
 	
 	/**
      * Classifier to add to the artifact generated.
+     * For example, if the classifier is "pkg", the artifact will be named "(ProjectNameAndVersion)-pkg.jar".
      * The artifact will be attached as a supplemental artifact.
      */
     @Parameter(defaultValue = "pkg", required = true)
