@@ -1,0 +1,60 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>de.ntcomputer</groupId>
+	<artifactId>executable-packer-maven-plugin</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>maven-plugin</packaging>
+	<name>Executable Packer Maven Plugin</name>
+	<description>Includes compile-time and runtime project dependencies as JAR files inside the packaged JAR file (jar-in-jar-packaging). Adds boilerplate code to allow hassle-free loading of dependencies when running stand-alone applications (adds a jar-in-jar-classloader and main class invocation redirection to register this classloader on startup).</description>
+
+	<properties>
+		<mavenArchiverVersion>3.1.1</mavenArchiverVersion>
+		<mavenVersion>3.0</mavenVersion>
+	</properties>
+
+	<prerequisites>
+		<maven>${mavenVersion}</maven>
+	</prerequisites>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-plugin-api</artifactId>
+			<version>${mavenVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-core</artifactId>
+			<version>${mavenVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-artifact</artifactId>
+			<version>${mavenVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-archiver</artifactId>
+			<version>${mavenArchiverVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.corn</groupId>
+			<artifactId>corn-cps</artifactId>
+			<version>1.1.10</version>
+			<exclusions>
+				<exclusion> <!-- artifact was not found for some reason, but it is also not necessary -->
+					<groupId>com.sun</groupId>
+					<artifactId>tools</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.maven.plugin-tools</groupId>
+			<artifactId>maven-plugin-annotations</artifactId>
+			<version>${mavenVersion}</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+</project>
