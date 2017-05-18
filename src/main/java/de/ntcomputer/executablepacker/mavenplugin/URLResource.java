@@ -21,7 +21,7 @@ public class URLResource extends PlexusIoURLResource {
 	 * The URL must point to an existing and valid file.
 	 * A connection will be opened to that URL to query lastModified and content size metadata.
 	 * 
-	 * @param url
+	 * @param url the URL to create the IO resource for
 	 * @return the created resource
 	 * @throws IOException if querying metadata fails
 	 */
