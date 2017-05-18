@@ -148,54 +148,6 @@ public class PackExecutableJarMojo extends AbstractMojo {
 	}
 
 	public void execute() throws MojoExecutionException, MojoFailureException {
-		// Old file-copy-based strategy. Not used anymore, but may be helpful as a reference in the future.
-		/*
-		// first create the directory to copy dependency libraries into
-		File libraryDirectory = new File(outputDirectory, libPath);
-		if (!libraryDirectory.isDirectory()) {
-			getLog().debug("Creating library directory '" + libraryDirectory.getAbsolutePath() + "'");
-			if (!libraryDirectory.mkdirs()) {
-				throw new MojoFailureException("Failed to create library directory '" + libraryDirectory.getAbsolutePath() + "'");
-			}
-		} else {
-			getLog().debug("Library directory '" + libraryDirectory.getAbsolutePath() + "' already exists");
-		}
-
-		String realLibPath = outputDirectory.toPath().relativize(libraryDirectory.toPath()).toString();
-		getLog().info("Dependency JAR files will be placed in '" + realLibPath + "/'");
-
-		// copy all relevant dependency JAR files to the library directory so they can be picked up by the archiver later
-		Set<Artifact> dependencyArtifacts = project.getArtifacts();
-		for (Artifact dependencyArtifact : dependencyArtifacts) {
-			// include only compile-time and run-time dependencies
-			if (Artifact.SCOPE_COMPILE.equals(dependencyArtifact.getScope()) || Artifact.SCOPE_RUNTIME.equals(dependencyArtifact.getScope())) {
-				// include only JAR files
-				if ("jar".equals(dependencyArtifact.getType())) {
-
-					File dependencyFile = dependencyArtifact.getFile();
-					getLog().info("Including dependency " + dependencyFile.getName());
-
-					try {
-						File destinationFile = new File(libraryDirectory, dependencyFile.getName());
-						getLog().debug("Comparing dependency '" + dependencyFile.getAbsolutePath() + "' with '" + destinationFile.getAbsolutePath() + "'");
-
-						// skip file if it exists and length and modification timestamp match
-						if (destinationFile.isFile() && destinationFile.length() == dependencyFile.length() && destinationFile.lastModified() == dependencyFile.lastModified()) {
-							getLog().debug("Skipped copying dependency '" + dependencyFile.getAbsolutePath() + "' to '" + destinationFile.getAbsolutePath() + "', file metadata matches");
-						} else {
-							getLog().debug("Copying dependency '" + dependencyFile.getAbsolutePath() + "' to '" + destinationFile.getAbsolutePath() + "'");
-							FileUtils.copyFile(dependencyFile, destinationFile, true);
-						}
-
-					} catch (IOException e) {
-						throw new MojoFailureException("Failed to copy dependency '" + dependencyFile.getAbsolutePath() + "' to '" + libraryDirectory.getAbsolutePath() + "'", e);
-					}
-
-				}
-			}
-		}
-		*/
-		
 		// determine output file
 		File outputJarFile = new File(outputDirectory, finalName + "-" + classifier + ".jar");
 		getLog().debug("Creating JAR file at '" + outputJarFile.getAbsolutePath() + "'");
