@@ -6,6 +6,12 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
 
+/**
+ * Helper class that provides a URL connection to a classpath resource.
+ * 
+ * @author Nikolaus Thuemmel
+ *
+ */
 public class JarInJarURLConnection extends URLConnection {
 	private final ClassLoader outerJarClassLoader;
 

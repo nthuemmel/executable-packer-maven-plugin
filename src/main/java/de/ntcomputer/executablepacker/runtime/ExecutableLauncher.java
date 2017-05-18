@@ -13,6 +13,14 @@ import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
+/**
+ * Launcher that provides a custom jar-in-jar-classloader in order to load nested dependency JARs at runtime.
+ * It uses information embedded in the main JAR's manifest regarding the dependency path, the list of dependencies, and the application's actual main class.
+ * Once the classloader is set up, the application's static main method is invoked.
+ * 
+ * @author Nikolaus Thuemmel
+ *
+ */
 public class ExecutableLauncher {
 	public static final String MANIFEST_APPLICATION_MAIN_CLASS = "Application-Main-Class";
 	public static final String MANIFEST_DEPENDENCY_LIBPATH = "Dependency-Libpath";

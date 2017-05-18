@@ -5,6 +5,12 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLStreamHandler;
 
+/**
+ * Helper class that opens appropriate URL connections for the custom jar-in-jar URL protocol.
+ * 
+ * @author Nikolaus Thuemmel
+ *
+ */
 public class JarInJarURLStreamHandler extends URLStreamHandler {
 	public static final String PROTOCOL = "jij";
 	private final ClassLoader outerJarClassLoader;
