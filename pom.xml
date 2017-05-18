@@ -9,6 +9,7 @@
 	<description>Includes compile-time and runtime project dependencies as JAR files inside the packaged JAR file (jar-in-jar-packaging). Adds boilerplate code to allow hassle-free loading of dependencies when running stand-alone applications (adds a jar-in-jar-classloader and main class invocation redirection to register this classloader on startup).</description>
 
 	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<mavenArchiverVersion>3.1.1</mavenArchiverVersion>
 		<mavenVersion>3.0</mavenVersion>
 	</properties>
