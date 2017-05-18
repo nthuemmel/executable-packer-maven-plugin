@@ -14,7 +14,7 @@ Quickly want to create a packaged JAR file? No problem!
     <plugin>
     	<groupId>de.ntcomputer</groupId>
     	<artifactId>executable-packer-maven-plugin</artifactId>
-    	<version>1.0</version>
+    	<version>1.0.0</version>
     	<configuration>
     		<mainClass>com.example.MyMainClass</mainClass>
     	</configuration>
@@ -78,7 +78,7 @@ Complete `pom.xml`:
 			<plugin>
 				<groupId>de.ntcomputer</groupId>
 				<artifactId>executable-packer-maven-plugin</artifactId>
-				<version>1.0</version>
+				<version>1.0.0</version>
 				<configuration>
 					<mainClass>de.ntcomputer.executablepacker.test.Test</mainClass>
 				</configuration>
