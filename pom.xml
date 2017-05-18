@@ -1,12 +1,36 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<groupId>de.ntcomputer</groupId>
 	<artifactId>executable-packer-maven-plugin</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>maven-plugin</packaging>
+
 	<name>Executable Packer Maven Plugin</name>
-	<description>Includes compile-time and runtime project dependencies as JAR files inside the packaged JAR file (jar-in-jar-packaging). Adds boilerplate code to allow hassle-free loading of dependencies when running stand-alone applications (adds a jar-in-jar-classloader and main class invocation redirection to register this classloader on startup).</description>
+	<description>This maven plugin is designed to create executable JAR files for stand-alone applications containing all dependencies as JAR files as well (referred to as jar-in-jar-packaging).</description>
+	<url>https://github.com/nthuemmel/executable-packer-maven-plugin</url>
+
+	<licenses>
+		<license>
+			<name>The Apache License, Version 2.0</name>
+			<url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<id>nthuemmel</id>
+			<name>Nikolaus Thuemmel</name>
+			<email>commit.nthuemmel@ntcomputer.de</email>
+			<url>https://github.com/nthuemmel</url>
+		</developer>
+	</developers>
+
+	<scm>
+		<connection>scm:git:git://github.com/nthuemmel/executable-packer-maven-plugin.git</connection>
+		<url>https://github.com/nthuemmel/executable-packer-maven-plugin/tree/master</url>
+	</scm>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -88,5 +112,35 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<profile>
+			<id>sign-artifacts</id>
+			<activation>
+				<property>
+					<name>signArtifacts</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.6</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>
