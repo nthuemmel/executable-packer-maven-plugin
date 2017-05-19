@@ -38,6 +38,26 @@ Quickly want to create a packaged JAR file? No problem!
 The plugin includes transitive compile-time and run-time project dependencies as JAR files inside the packaged JAR file (jar-in-jar-packaging).
 Since the standard classloaders are not able to load classes from JAR files inside JAR files, the plugin also adds boilerplate code that provides a jar-in-jar-classloader and redirects the main class invocation to register this classloader on startup.
 
+The steps that are taken in detail:
+
+**At compile-time** (when you run `mvn package`):
+
+1. Search for all compile-time and run-time JAR dependency artifacts
+2. Configure JAR manifest: add application's main class, launcher's main class, dependency library path and list of dependency JARs to the manifest
+3. Add all classes and resources to the created JAR file
+4. Add all dependency JAR files (found in step 1) to the JAR file
+5. Add launcher classes to the JAR file
+6. Attach the created JAR file as an additional artifact to the project
+
+**At run-time** (when you run `java -jar <YourProjectAndVersion>-pkg.jar`)
+
+1. Start the launcher's main method
+2. Read the JAR's manifest, extract information about the application's main class and dependencies
+3. Register the custom `jij` (jar-in-jar) URL protocol
+4. Create a single `URLClassLoader` for the classes contained directly in the JAR file and URLs to all dependencies
+5. Register the classloader with the main thread
+6. Call the application's main method
+
 ## Configuration
 
 The *executable-packer-maven-plugin* supports most parameters that the *maven-jar-plugin* supports too. The following parameters can be specified in the `<configuration>` section:
@@ -101,6 +121,11 @@ Complete `pom.xml`:
 	</dependencies>
 </project>
 ```
+
+## Caveats
+
+The runtime launcher registers the custom URL protocol `jij` in order to correctly resolve classes and resources. It sets a global `URLStreamHandlerFactory` to do so (using `URL.setURLStreamHandlerFactory()`).
+If your application attempts to use `URL.setURLStreamHandlerFactory()` too, it will fail. Applications relying on setting a custom `URLStreamHandlerFactory` will not work in conjunction with this plugin.
 
 ## Credits
 
