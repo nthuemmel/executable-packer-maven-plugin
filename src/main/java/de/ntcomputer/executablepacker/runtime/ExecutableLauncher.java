@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.MissingResourceException;
 import java.util.jar.Attributes;
@@ -32,30 +33,51 @@ public class ExecutableLauncher {
 		ClassLoader usedClassLoader = outerJarClassLoader;
 		
 		// parse Manifest file
-		InputStream manifestStream = outerJarClassLoader.getResourceAsStream(JarFile.MANIFEST_NAME);
-		if(manifestStream==null) {
+		String applicationMainClassName = null;
+		String dependencyLibPath = null;
+		String dependencyJarFilenames = null;
+		
+		// Multiple Manifest files may be on the classpath. Parse all of them to find the correct one containing the required metadata
+		Enumeration<URL> manifestURLs = outerJarClassLoader.getResources(JarFile.MANIFEST_NAME);
+		if(manifestURLs==null || !manifestURLs.hasMoreElements()) {
 			throw new MissingResourceException("Manifest file (" + JarFile.MANIFEST_NAME + ") is missing", ExecutableLauncher.class.getName(), JarFile.MANIFEST_NAME);
 		}
 		
-		String applicationMainClassName;
-		String dependencyLibPath;
-		String dependencyJarFilenames;
-		try {
-			Manifest manifest = new Manifest(manifestStream);
-			Attributes manifestAttributes = manifest.getMainAttributes();
-			applicationMainClassName = manifestAttributes.getValue(MANIFEST_APPLICATION_MAIN_CLASS);
-			dependencyLibPath = manifestAttributes.getValue(MANIFEST_DEPENDENCY_LIBPATH);
-			dependencyJarFilenames = manifestAttributes.getValue(MANIFEST_DEPENDENCY_JARS);
-		} finally {
-			manifestStream.close();
+		while(manifestURLs.hasMoreElements()) {
+			URL manifestURL = manifestURLs.nextElement();
+			try {
+				InputStream manifestStream = manifestURL.openStream();
+				try {
+					Manifest manifest = new Manifest(manifestStream);
+					Attributes manifestAttributes = manifest.getMainAttributes();
+					String manifestApplicationMainClassName = manifestAttributes.getValue(MANIFEST_APPLICATION_MAIN_CLASS);
+					String manifestDependencyLibPath = manifestAttributes.getValue(MANIFEST_DEPENDENCY_LIBPATH);
+					String manifestDependencyJarFilenames = manifestAttributes.getValue(MANIFEST_DEPENDENCY_JARS);
+					if(manifestApplicationMainClassName!=null) {
+						manifestApplicationMainClassName = manifestApplicationMainClassName.trim();
+						if(!manifestApplicationMainClassName.trim().isEmpty()) {
+							applicationMainClassName = manifestApplicationMainClassName;
+							dependencyLibPath = manifestDependencyLibPath;
+							dependencyJarFilenames = manifestDependencyJarFilenames;
+							break; // This is the correct manifest
+						}
+					}
+				} finally {
+					manifestStream.close();
+				}
+			} catch(Exception e) {
+				// Ignore exceptions while parsing a single manifest file
+			}
+		}
+		
+		if(applicationMainClassName==null) {
+			throw new IOException("Manifest is missing entry " + MANIFEST_APPLICATION_MAIN_CLASS); // No manifest contained the required metadata
 		}
 		
 		if(dependencyLibPath==null) {
 			dependencyLibPath = "";
-		}
-		
-		if(applicationMainClassName==null || applicationMainClassName.isEmpty()) {
-			throw new IOException("Manifest is missing entry " + MANIFEST_APPLICATION_MAIN_CLASS);
+		} else {
+			dependencyLibPath = dependencyLibPath.trim();
 		}
 		
 		// parse and apply dependency JAR paths
