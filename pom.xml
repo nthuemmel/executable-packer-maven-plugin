@@ -4,7 +4,7 @@
 
 	<groupId>de.ntcomputer</groupId>
 	<artifactId>executable-packer-maven-plugin</artifactId>
-	<version>1.0.1</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<packaging>maven-plugin</packaging>
 
 	<name>Executable Packer Maven Plugin</name>
