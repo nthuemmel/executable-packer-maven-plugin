@@ -1,5 +1,11 @@
 # executable-packer-maven-plugin
 
+## Project No Longer Maintained
+
+As of 11/2023, this project is archived.
+It will no longer be maintained.
+The plugin is likely incompatible with new Java or Maven versions.
+
 ## Introduction
 
 This maven plugin is designed to create executable JAR files for stand-alone applications containing all dependencies as JAR files as well (referred to as jar-in-jar-packaging).
